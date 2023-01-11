@@ -164,15 +164,16 @@ class Logger
     public function exception(\Throwable $e, bool $withTrace = false): bool
     {
         $data = [
-            'class'   => get_class($e),
+            'class' => get_class($e),
             'massage' => $e->getMessage(),
-            'code'    => $e->getCode(),
-            'file'    => $e->getFile(),
-            'line'    => $e->getLine(),
+            'code' => $e->getCode(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
         ];
 
-        if ($withTrace)
+        if ($withTrace) {
             $data['trace'] = $e->getTrace();
+        }
 
         return $this->log($data, 'exception');
     }
@@ -185,16 +186,17 @@ class Logger
      */
     public function log($data, string $level = 'log'): bool
     {
-        if (!$this->silent) {
+        if (! $this->silent) {
             $this->save($data, $level);
+
             return true;
         }
 
         try {
             $this->save($data, $level);
+
             return true;
         } catch (\Throwable $e) {
-
         }
 
         return false;
@@ -208,13 +210,15 @@ class Logger
      */
     protected function save($data, string $level = 'log')
     {
-        if ($this->isDaily)
+        if ($this->isDaily) {
             $level .= '-' . date('Y-m-d');
+        }
 
         $fullPath = $this->getFullPath();
 
-        if (!is_dir($fullPath))
+        if (! is_dir($fullPath)) {
             mkdir($fullPath, $this->permission, true);
+        }
 
         $file = $fullPath . DIRECTORY_SEPARATOR . "$level.$this->extension";
 
@@ -222,14 +226,16 @@ class Logger
 
         $cloner = new VarCloner();
 
-        if (null === $output) {
-
-            $output = fopen($file, 'a+b');
-
-            fwrite($output, $this->getLogTitle());
+        if (is_resource($output)) {
+            fclose($output);
+            $output = null;
         }
 
-        if (false === is_resource($output)) {
+        $output = fopen($file, 'a+b');
+
+        fwrite($output, $this->getLogTitle());
+
+        if (! is_resource($output)) {
             throw new RuntimeException('Output should be a resource, Maybe something went wrong creating the log file.');
         }
 
@@ -258,8 +264,9 @@ class Logger
      */
     protected function getFullPath(): string
     {
-        if (empty($this->path))
+        if (empty($this->path)) {
             throw new InvalidArgumentException('Please specify log directory location with path() method, The $path to log directory should contain a value.');
+        }
 
         return str_replace(
             DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
@@ -335,8 +342,9 @@ class Logger
     {
         $this->dumper = $dumper;
 
-        if ($extension)
+        if ($extension) {
             $this->extension = $extension;
+        }
 
         return $this;
     }

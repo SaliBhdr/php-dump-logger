@@ -1,2 +1,7 @@
-./vendor
-./composer.lock
+vendor
+composer.lock
+.idea
+.ddev
+.php_cs.cache
+logs
+tmp
