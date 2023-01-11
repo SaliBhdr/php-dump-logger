@@ -1,0 +1,35 @@
+{
+  "name": "salibhdr/dump-logger",
+  "description": "A simple, easy to use, eye-friendly, and pretty logger for any PHP application, It can be used either standalone, with Laravel, Symfony, yii2, and other PHP frameworks",
+  "type": "package",
+  "license": "MIT",
+  "keywords": [
+    "salibhdr",
+    "laravel",
+    "symfony",
+    "logger",
+    "log",
+    "php",
+    "simple logger",
+    "pretty logger",
+    "eye friendly logger",
+    "dump logger"
+  ],
+  "authors": [
+    {
+      "name": "Salar Bahador",
+      "email": "bahador.salar@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "symfony/var-dumper": ">=3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "SaliBhdr\\DumpLog\\": "src/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
