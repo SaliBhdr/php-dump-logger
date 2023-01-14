@@ -25,7 +25,6 @@
       "email": "bahador.salar@gmail.com"
     }
   ],
-
   "require": {
     "php": ">=7.0",
     "symfony/var-dumper": ">=3.0"
@@ -47,9 +46,12 @@
   },
   "scripts": {
     "csfix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
-    "test": "vendor/bin/phpunit"
+    "test": "vendor/bin/phpunit --testdox",
+    "testfix": [
+      "@csfix",
+      "@test"
+    ]
   },
-
   "minimum-stability": "stable",
   "prefer-stable": true
 }

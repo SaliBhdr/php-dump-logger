@@ -1,7 +1,15 @@
-vendor
-composer.lock
+# dirs
+.DS_Store
 .idea
+vendor
 .ddev
-.php_cs.cache
 logs
 tmp
+build
+.vscode
+
+# files
+composer.lock
+.php_cs.cache
+.phpunit.result.cache
+.php-cs-fixer.cache

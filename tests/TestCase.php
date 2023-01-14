@@ -4,16 +4,8 @@ namespace SaliBhdr\DumpLog\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
-abstract class LoggerTestCase extends BaseTestCase
+abstract class TestCase extends BaseTestCase
 {
-    protected function tearDown()
-    {
-        $this->removeDir($this->getLogsPath('logs'));
-        $this->removeDir($this->getLogsPath('tmp'));
-
-        parent::tearDown();
-    }
-
     protected function removeDir(string $dir): bool
     {
         if (!file_exists($dir)) {
@@ -37,21 +29,6 @@ abstract class LoggerTestCase extends BaseTestCase
         return rmdir($dir);
     }
 
-    protected function getLogsPath(string $pathName = 'logs'): string
-    {
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $pathName;
-    }
-
-    protected function getLogsDir(string $dirName = 'dump', string $pathName = 'logs'): string
-    {
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $pathName . DIRECTORY_SEPARATOR . $dirName;
-    }
-
-    protected function getLogFilePath(string $filename, string $dirName = 'dump', string $pathName = 'logs'): string
-    {
-        return $this->getLogsDir($dirName, $pathName) . DIRECTORY_SEPARATOR . $filename;
-    }
-
     public function assertFileContains(string $path, string $phrase)
     {
         $content = @file_get_contents($path);
@@ -63,9 +40,9 @@ abstract class LoggerTestCase extends BaseTestCase
         $this->assertTrue(strpos($content, $phrase) !== false, "Target file does not contains `$phrase`");
     }
 
-    protected function str_random(int $chars = 10): string
+    protected function strRandom(int $chars = 10): string
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters   = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
 
         for ($i = 0; $i < $chars; $i++) {
@@ -74,5 +51,40 @@ abstract class LoggerTestCase extends BaseTestCase
         }
 
         return $randomString;
+    }
+
+    protected function assertFilePermission(string $path, string $expected)
+    {
+        $actual = $this->getFilePermission($path);
+
+        $this->assertEquals($expected, $actual, "'The directory '$path' permission expected to be $expected but actual is $actual'");
+    }
+
+    protected function getFilePermission(string $path): string
+    {
+        return substr(
+            sprintf(
+                '%o',
+                fileperms($path)
+            ),
+            -4
+        );
+    }
+
+    protected function callNotPublicMethod($class, string $method, array $args)
+    {
+        if (is_object($class)) {
+            $stringClass = get_class($class);
+        } else {
+            $stringClass = $class;
+        }
+
+        $reflectionClass = new \ReflectionClass($stringClass);
+
+        $method = $reflectionClass->getMethod($method);
+
+        $method->setAccessible(true);
+
+        $method->invokeArgs($class, $args);
     }
 }
