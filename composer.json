@@ -1,5 +1,5 @@
 {
-  "name": "salibhdr/dump-logger",
+  "name": "salibhdr/php-dump-logger",
   "description": "A simple, easy to use, eye-friendly, and pretty logger for any PHP application, It can be used either standalone, with Laravel, Symfony, yii2, and other PHP frameworks",
   "type": "package",
   "license": "MIT",
@@ -13,11 +13,12 @@
     "simple logger",
     "pretty logger",
     "eye friendly logger",
-    "dump logger"
+    "dump logger",
+    "php dump logger"
   ],
   "support": {
-    "issues": "https://github.com/SaliBhdr/dump-logger/issues",
-    "source": "https://github.com/SaliBhdr/dump-logger"
+    "issues": "https://github.com/SaliBhdr/php-dump-logger/issues",
+    "source": "https://github.com/SaliBhdr/php-dump-logger"
   },
   "authors": [
     {
