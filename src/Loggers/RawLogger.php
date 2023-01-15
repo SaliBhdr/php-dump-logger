@@ -1,13 +1,15 @@
 <?php
 
-namespace SaliBhdr\DumpLog;
+namespace SaliBhdr\DumpLog\Loggers;
 
+use SaliBhdr\DumpLog\Contracts\ChangeableDumperLoggerInterface;
+use SaliBhdr\DumpLog\Contracts\DumpLoggerInterface;
 use SaliBhdr\DumpLog\Exceptions\InvalidArgumentException;
 use SaliBhdr\DumpLog\Exceptions\RuntimeException;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\AbstractDumper;
 
-class Logger
+class RawLogger implements ChangeableDumperLoggerInterface
 {
     /**
      * If set to true it will create separate file each day with date suffix
@@ -47,7 +49,7 @@ class Logger
     /**
      * @var string
      */
-    protected $extension = 'log';
+    protected $extension;
 
     /**
      * If set to true the logger will not throw error and simply will return boolean as result
@@ -58,26 +60,11 @@ class Logger
      */
     protected $silent = false;
 
-    public function __construct()
-    {
-        $this->path = $_SERVER['DOCUMENT_ROOT'] ?? null;
-
-        $this->dumper = DumperFactory::make();
-    }
-
-    /**
-     * For ease of use for chain method call we can use init instead of constructor
-     *
-     * @return static
-     */
-    public static function init(): self
-    {
-        return new self();
-    }
-
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function emergency($data): bool
@@ -87,7 +74,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function alert($data): bool
@@ -97,7 +86,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function critical($data): bool
@@ -107,7 +98,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function error($data): bool
@@ -117,7 +110,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function warning($data): bool
@@ -127,7 +122,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function notice($data): bool
@@ -137,7 +134,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function info($data): bool
@@ -147,7 +146,9 @@ class Logger
 
     /**
      * @param mixed $data
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function debug($data): bool
@@ -157,8 +158,10 @@ class Logger
 
     /**
      * @param \Throwable $e
-     * @param bool $withTrace
+     * @param bool       $withTrace
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function exception(\Throwable $e, bool $withTrace = false): bool
@@ -171,69 +174,88 @@ class Logger
             'line'    => $e->getLine(),
         ];
 
-        if ($withTrace)
+        if ($withTrace) {
             $data['trace'] = $e->getTrace();
+        }
 
         return $this->log($data, 'exception');
     }
 
     /**
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $level
+     *
      * @return bool
+     *
      * @throws RuntimeException|InvalidArgumentException
      */
     public function log($data, string $level = 'log'): bool
     {
         if (!$this->silent) {
             $this->save($data, $level);
+
             return true;
         }
 
         try {
             $this->save($data, $level);
+
             return true;
         } catch (\Throwable $e) {
-
         }
 
         return false;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $level
-     * @return void
-     * @throws RuntimeException|InvalidArgumentException
+     * @param bool   $makeDir
+     *
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
-    protected function save($data, string $level = 'log')
+    protected function save($data, string $level = 'log', bool $makeDir = true)
     {
-        if ($this->isDaily)
-            $level .= '-' . date('Y-m-d');
+        if (empty($this->dumper) || empty($this->extension)) {
+            throw new InvalidArgumentException('Please specify a dumper and file extension with dumper() method.');
+        }
 
         $fullPath = $this->getFullPath();
 
-        if (!is_dir($fullPath))
-            mkdir($fullPath, $this->permission, true);
+        if ($makeDir) {
+            $this->makeDirIfNotExists($fullPath);
+        }
+
+        if ($this->isDaily) {
+            $level .= '-' . date('Y-m-d');
+        }
 
         $file = $fullPath . DIRECTORY_SEPARATOR . "$level.$this->extension";
 
-        static $output = null;
-
         $cloner = new VarCloner();
 
-        if (null === $output) {
+        $output = @fopen($file, 'a+b');
 
-            $output = fopen($file, 'a+b');
-
-            fwrite($output, $this->getLogTitle());
+        if (!$output || !is_resource($output)) {
+            throw new RuntimeException("Output should be a resource, The directory `$fullPath` not exists. Maybe something went wrong with log file creation.");
         }
 
-        if (false === is_resource($output)) {
-            throw new RuntimeException('Output should be a resource, Maybe something went wrong creating the log file.');
-        }
+        fwrite($output, $this->getLogTitle());
 
         $this->dumper->dump($cloner->cloneVar($data), $output);
+    }
+
+    /**
+     * @param string $path
+     */
+    protected function makeDirIfNotExists(string $path)
+    {
+        if (!is_dir($path)) {
+            $oldMask = umask(0);
+            mkdir($path, $this->permission, true);
+            umask($oldMask);
+        }
     }
 
     /**
@@ -242,9 +264,9 @@ class Logger
     protected function getLogTitle(): string
     {
         $title = "\n";
-        $title .= "---| ";
+        $title .= '---| ';
         $title .= date('Y-m-d H:i:s');
-        $title .= " |-------------------------------------------------------------------------------------------";
+        $title .= ' |-------------------------------------------------------------------------------------------';
         $title .= "\n\n";
 
         return $title;
@@ -254,12 +276,14 @@ class Logger
      * Returns the full path to the log directory
      *
      * @return string
+     *
      * @throws InvalidArgumentException
      */
     protected function getFullPath(): string
     {
-        if (empty($this->path))
+        if (empty($this->path)) {
             throw new InvalidArgumentException('Please specify log directory location with path() method, The $path to log directory should contain a value.');
+        }
 
         return str_replace(
             DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
@@ -274,9 +298,10 @@ class Logger
      * Default value is global server variable's 'DOCUMENT_ROOT' if exists or current directory which the logger is called
      *
      * @param string $path
+     *
      * @return $this
      */
-    public function path(string $path): self
+    public function path(string $path = null): DumpLoggerInterface
     {
         $this->path = $path;
 
@@ -289,9 +314,10 @@ class Logger
      * Default directory name is dump
      *
      * @param string $dir
-     * @return Logger
+     *
+     * @return $this
      */
-    public function dir(string $dir): Logger
+    public function dir(string $dir): DumpLoggerInterface
     {
         $this->dir = $dir;
 
@@ -304,9 +330,10 @@ class Logger
      * Default is 0770 (all access to owner and group)
      *
      * @param int $permission
+     *
      * @return $this
      */
-    public function permission(int $permission): self
+    public function permission(int $permission): DumpLoggerInterface
     {
         $this->permission = $permission;
 
@@ -317,9 +344,10 @@ class Logger
      * If set to true it will create separate file each day with date suffix
      *
      * @param bool $isDaily
+     *
      * @return $this
      */
-    public function daily(bool $isDaily = true): self
+    public function daily(bool $isDaily = true): DumpLoggerInterface
     {
         $this->isDaily = $isDaily;
 
@@ -328,37 +356,16 @@ class Logger
 
     /**
      * @param AbstractDumper $dumper
-     * @param string $extension
+     * @param string         $extension
+     *
      * @return $this
      */
-    public function dumper(AbstractDumper $dumper, string $extension = null): self
+    public function dumper(AbstractDumper $dumper, string $extension): ChangeableDumperLoggerInterface
     {
-        $this->dumper = $dumper;
-
-        if ($extension)
-            $this->extension = $extension;
+        $this->dumper    = $dumper;
+        $this->extension = $extension;
 
         return $this;
-    }
-
-    /**
-     * Creates a html log file with .html extension
-     *
-     * @return $this
-     */
-    public function asHtml(): self
-    {
-        return $this->dumper(DumperFactory::make('html'), 'html');
-    }
-
-    /**
-     * Creates a normal log file with .log extension
-     *
-     * @return $this
-     */
-    public function asLog(): self
-    {
-        return $this->dumper(DumperFactory::make('cli'), 'log');
     }
 
     /**
@@ -368,9 +375,9 @@ class Logger
      *
      * @param bool $silent
      *
-     * @return Logger
+     * @return $this
      */
-    public function silent(bool $silent = true): Logger
+    public function silent(bool $silent = true): DumpLoggerInterface
     {
         $this->silent = $silent;
 

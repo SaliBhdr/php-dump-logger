@@ -1,5 +1,5 @@
 {
-  "name": "salibhdr/dump-logger",
+  "name": "salibhdr/php-dump-logger",
   "description": "A simple, easy to use, eye-friendly, and pretty logger for any PHP application, It can be used either standalone, with Laravel, Symfony, yii2, and other PHP frameworks",
   "type": "package",
   "license": "MIT",
@@ -13,8 +13,13 @@
     "simple logger",
     "pretty logger",
     "eye friendly logger",
-    "dump logger"
+    "dump logger",
+    "php dump logger"
   ],
+  "support": {
+    "issues": "https://github.com/SaliBhdr/php-dump-logger/issues",
+    "source": "https://github.com/SaliBhdr/php-dump-logger"
+  },
   "authors": [
     {
       "name": "Salar Bahador",
@@ -25,10 +30,28 @@
     "php": ">=7.0",
     "symfony/var-dumper": ">=3.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": ">=6.5",
+    "mockery/mockery": ">=1.3",
+    "friendsofphp/php-cs-fixer": "^2.19"
+  },
   "autoload": {
     "psr-4": {
       "SaliBhdr\\DumpLog\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SaliBhdr\\DumpLog\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "csfix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
+    "test": "vendor/bin/phpunit --testdox",
+    "testfix": [
+      "@csfix",
+      "@test"
+    ]
   },
   "minimum-stability": "stable",
   "prefer-stable": true
