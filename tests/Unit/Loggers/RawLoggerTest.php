@@ -105,4 +105,14 @@ class RawLoggerTest extends TestCase
 
         $this->assertTrue($result);
     }
+
+    public function testTheLogTimeIsCorrect()
+    {
+        (new RawLogger())
+            ->path($this->getLogsPath())
+            ->dumper(Dumper::cli(), 'log')
+            ->log('test');
+
+        $this->assertFileContains($this->getLogFilePath('log.log'), date('Y-m-d H:i:s'));
+    }
 }

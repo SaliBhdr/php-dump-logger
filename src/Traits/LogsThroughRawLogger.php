@@ -137,7 +137,7 @@ trait LogsThroughRawLogger
      *
      * @param string $path
      *
-     * @return $this
+     * @return DumpLoggerInterface
      */
     public function path(string $path): DumpLoggerInterface
     {
@@ -153,7 +153,7 @@ trait LogsThroughRawLogger
      *
      * @param string $dir
      *
-     * @return $this
+     * @return DumpLoggerInterface
      */
     public function dir(string $dir): DumpLoggerInterface
     {
@@ -169,7 +169,7 @@ trait LogsThroughRawLogger
      *
      * @param int $permission
      *
-     * @return $this
+     * @return DumpLoggerInterface
      */
     public function permission(int $permission): DumpLoggerInterface
     {
@@ -183,7 +183,7 @@ trait LogsThroughRawLogger
      *
      * @param bool $isDaily
      *
-     * @return $this
+     * @return DumpLoggerInterface
      */
     public function daily(bool $isDaily = true): DumpLoggerInterface
     {
@@ -199,7 +199,7 @@ trait LogsThroughRawLogger
      *
      * @param bool $silent
      *
-     * @return $this
+     * @return DumpLoggerInterface
      */
     public function silent(bool $silent = true): DumpLoggerInterface
     {
