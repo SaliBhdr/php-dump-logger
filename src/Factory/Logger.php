@@ -19,10 +19,12 @@ class Logger implements FactoryInterface
                 return self::pretty();
         }
     }
+
     public static function html(): DumpLoggerInterface
     {
         return new HtmlLogger();
     }
+
     public static function pretty(): DumpLoggerInterface
     {
         return new PrettyLogger();
