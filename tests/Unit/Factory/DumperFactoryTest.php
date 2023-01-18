@@ -32,15 +32,15 @@ class DumperFactoryTest extends TestCase
 
     public function testCliMethodWillReturnCliDumper()
     {
-        $dumper = Dumper::html();
+        $dumper = Dumper::cli();
 
-        $this->assertInstanceOf(HtmlDumper::class, $dumper);
+        $this->assertInstanceOf(CliDumper::class, $dumper);
     }
 
     public function testHtmlMethodWillReturnHtmlDumper()
     {
-        $dumper = Dumper::cli();
+        $dumper = Dumper::html();
 
-        $this->assertInstanceOf(CliDumper::class, $dumper);
+        $this->assertInstanceOf(HtmlDumper::class, $dumper);
     }
 }

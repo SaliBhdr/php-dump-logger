@@ -85,6 +85,6 @@ abstract class TestCase extends BaseTestCase
 
         $method->setAccessible(true);
 
-        $method->invokeArgs($class, $args);
+        return $method->invokeArgs($class, $args);
     }
 }
