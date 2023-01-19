@@ -1,6 +1,6 @@
 {
   "name": "salibhdr/php-dump-logger",
-  "description": "A simple, easy to use, eye-friendly, and pretty logger for any PHP application, It can be used either standalone, with Laravel, Symfony, yii2, and other PHP frameworks",
+  "description": "PHP dump logger uses Symfony's var-dumper to create a simple, easy to use, eye-friendly, and pretty log files for any PHP application. It can be used either standalone, with Laravel, Symfony, yii2, and other PHP frameworks",
   "type": "package",
   "license": "MIT",
   "keywords": [
@@ -46,7 +46,7 @@
     }
   },
   "scripts": {
-    "csfix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
+    "csfix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist",
     "test": "vendor/bin/phpunit --testdox",
     "testfix": [
       "@csfix",
