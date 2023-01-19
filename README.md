@@ -1,28 +1,53 @@
 # PHP Dump Logger
+## It's All About Readability.
 
 ![SaliBhdr|typhoon][link-logo]
 
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Required PHP Version][ico-php]][link-packagist]
 [![Latest Versions][ico-version]][link-packagist]
-[![License][ico-license]][link-packegist]
+[![License][ico-license]][link-packagist]
 [![Today Downloads][ico-today-downloads]][link-downloads]
 
 [![Build Status](https://travis-ci.org/salibhdr/php-dump-logger.svg?branch=master)](https://travis-ci.org/salibhdr/php-dump-logger)
 [![Coverage Status](https://coveralls.io/repos/github/salibhdr/php-dump-logger/badge.svg?branch=develop)](https://coveralls.io/github/salibhdr/php-dump-logger?branch=develop)
 
-# It's All About readability.
+## Table of Contents
+* [Introduction](#intoduction)
+* [Installation](#installation)
+* [Version Compatibility](#version-compatibility)
+* [Basic Usage](#basic-usage)
+* [Detailed Usage](#detailed-usage)
+  * [Methods](#methods)
+  * [Exception Logging](#exception-logging)
+  * [Custom Log Level](#custom-log-level)
+  * [Path](#path)
+  * [Directory Name](#directory-name)
+  * [Directory Permission](#directory-permission)
+  * [Daily Log](#daily-log)
+  * [Silent Logging](#silent-logging)
+* [Loggers](#loggers)
+    * [Pretty Logger](#pretty-logger)
+    * [Html Logger](#html-logger)
+    * [Raw Logger](#raw-logger)
+    * [Custom Logger](#custom-logger)
+* [Full Example](#full-example)
+* [Issues](#issues)
+* [License](#license)
+* [Testing](#testing)
+* [Contributing](#contributing)
+
 
 ## Introduction
 PHP dump logger uses [Symfony's var-dumper][link-symfony-var-dumper] to create a simple, easy to use, eye-friendly, and pretty log files for any PHP application. 
-If you are the fan of using `dd()` and `dump()` like my self, this package is for you.
+If you are the fan of using `dd()` and `dump()`, this package is for you.
 
 **Example log file content:**
 
 ![php dump logger](https://symfony.com/doc/6.2/_images/01-simple.png)
 
 Have you ever tried to log something with Symfony's monolog or laravel's logger facade and tried to find the logged data inside a maze of text?
-Especially when you don't have the time and don't want to go through installing and configuring Xdebug or there is a bug in production code,
+Specially when you don't have time and don't want to go through installing and configuring Xdebug or there is a bug in production code,
 and you just want to see the API responses without messing with the code execution. 
 The first solution that comes to mind is to use a logger to log the data instead of using `dd()`, `dump()`, or `var_dump()` functions. 
 But as I said loggers aren't producing readable files. You have to provide them with string, and they are incapable of directly logging a complex class. 
@@ -41,7 +66,7 @@ You can either log the data in a nice `html` or `log` format or even provide you
 * Fully customization of log format and dumper
 * Separate daily and all in one logs
 * Logging file in a custom level
-* Changing the path and directory of log
+* Changing the path and directory of the log
 
 ## Installation
 
@@ -99,9 +124,18 @@ array:3 [
 
 ## Detailed Usage
 
-#### Log methods:
+* [Methods](#methods)
+* [Exception Logging](#exception-logging)
+* [Custom Log Level](#custom-log-level)
+* [Path](#path)
+* [Directory Name](#directory-name)
+* [Directory Permission](#directory-permission)
+* [Daily Log](#daily-log)
+* [Silent Logging](#silent-logging)
 
-Each log level (info, error, warning, etc.) creates a separate log file with same name.
+### Methods
+
+Each log level (info, error, warning, etc.) creates a separate log file with method's name.
 
 ```php
 
@@ -122,40 +156,13 @@ $logger->exception(\Throwable $exception);
 $logger->log(mixed $data);
 
 ```
------------------------
-#### Exception Log:
+
+<br/>
+
+### Exception Logging
 
 If you want to log the exception in much more readable way You should use `exception()` method.
 It is good for creating logs for exceptions like this:
-
-```php
-try {
-
-    throw new \Exception('exception message', 500);
-    
-} catch (\Throwable $e) {
-
-    $logger->exception($e);
-}
-```
-
-Will output:
-
-```text
-- exception.log
-
----| 2023-01-18 14:01:54 |-------------------------------------------------------------------------------------------
-
-array:5 [
-  "class" => "Exception"
-  "massage" => "exception message"
-  "code" => 500
-  "file" => "__path_to_file__"
-  "line" => 356
-]
-
-```
-
 If You want to see the trace of the exception you can set the second argument named `$withTrace` to true:
 
 ```php
@@ -169,25 +176,26 @@ try {
 }
 ```
 
-Will output:
+Output `exception.log`:
 
 ```text
-- exception.log
 
----| 2023-01-18 15:01:06 |-------------------------------------------------------------------------------------------
+---| 2023-01-18 14:01:54 |-------------------------------------------------------------------------------------------
 
 array:5 [
   "class" => "Exception"
   "massage" => "exception message"
   "code" => 500
   "file" => "__path_to_file__"
-  "line" => 356,
-   "trace" => array:12 [...]
+  "line" => 356
+  "trace" => array:12 [...] // appears only if $withTrace is true
 ]
 
 ```
 
-#### Custom Log Level:
+<br/>
+
+### Custom Log Level
 
 As mentioned before each log level creates a separate log file. So you can create custom log level with custom
 file name by changing the value of `$level` argument in `log()` method:
@@ -198,8 +206,9 @@ file name by changing the value of `$level` argument in `log()` method:
 
 This will create a file named `custom-level.log`.
 
------------------------
-#### `path()`: Path to log directory
+<br/>
+
+### Path
 
 By default, the path to log directory is set to be `$_SERVER['DOCUMENT_ROOT']` but if you call this logger
 from a console command the document rule will be null and the logger could not find a directory to save the file, and it will throw
@@ -211,8 +220,9 @@ $logger->path('__path-to-dir__');
 
 ```
 
------------------------
-#### `dir()`: Directory name of the log files
+<br/>
+
+### Directory Name
 
 By default, The parent directory of log files is called `dump` but you can change the directory name of the log file with `dir()` method:
 
@@ -231,8 +241,9 @@ $logger->dir('dump/custom')
 
 ```
 
------------------------
-#### `permission()`: Permission of log directory on creation
+<br/>
+
+### Directory Permission
 
 Sometimes you want to put your log files in a directory with restricted permission. 
 In order to do that you can change the log file's directory permission with the `permission()` method. 
@@ -247,10 +258,12 @@ By default, the directory and the files inside it will have 0775 permission.
 $logger->permission(0777);
 
 ```
------------------------
-#### `daily()`: Separating the log files daily with date suffix
 
-Sometimes you want to log data daily into separate file's based on date. You can do this by calling the `daily()` method.
+<br/>
+
+### Daily Log
+
+Sometimes you want to log data daily into separate file's based on date, You can separate the log files daily with date suffix by calling the `daily()` method.
 
 ```php
 
@@ -259,7 +272,7 @@ $logger->daily()
 
 ```
 
-It will create file's like this in separate days:
+It will create file's like this for separate days:
 
 ```text
 
@@ -268,11 +281,16 @@ info-2023-01-19.log
 info-2023-02-01.log
 
 ```
------------------------
-#### `silent()`: Execution of logging silently without throwing error
 
-Remember that the logger will throw error some cases like when the $path is empty, or it couldn't write into the target file
-based on permission. So if you want to avoid that, and you don't want to interrupt the code execution. you can call `silent()` method.
+<br/>
+
+### Silent Logging
+
+Calling `silent()` method allows you to log data without throwing an error. 
+
+Remember that in some cases the logger will throw an error like when the $path is empty, or when it couldn't write into the target file for permission reasons. 
+
+So if you want to avoid that, and you don't want to interrupt the code execution, you can call `silent()` method.
 In the background this method will force the logger to execute the code in try-catch block and return a boolean instead of the exception.
 
 ```php
@@ -281,13 +299,21 @@ $logger->silent(); //result will be true for success and false for failed attemp
 
 ```
 
-### Different Type of Logging
+<br/>
 
-#### Pretty Logger:
+## Loggers
+
+* [Pretty Logger](#pretty-logger)
+* [Html Logger](#html-logger)
+* [Raw Logger](#raw-logger)
+* [Custom Logger](#custom-logger)
+
+
+### Pretty Logger
 
 The pretty logger is used for creating a log file with `.log` extension in a pretty readable way.
 
-You can make the pretty logger class with logger factory like so:
+You can make the pretty logger class with logger factory class like so:
 
 ```php
 <?php
@@ -305,11 +331,13 @@ $logger = Logger::make('pretty');
 $logger = Logger::pretty();
 
 ```
------------------------
-#### Html Logger:
+
+<br/>
+
+### Html Logger
 
 The html logger is used for creating a log file with `.html` extension in a pretty readable way.
-You can navigate throw different variables, open and close the multidimensional arrays and complex class properties.
+You can navigate throw different variables, toggle the multidimensional arrays and complex class properties.
 
 You can make the html logger class with logger factory like so:
 
@@ -326,30 +354,111 @@ $logger = Logger::html();
 
 ```
 
------------------------
-#### Raw Logger
+<br/>
 
+### Raw Logger
 
------------------------
-#### Creating You Own Logger
+Raw Logger is base logger class that other loggers are using it. The only difference between Raw Logger and the others is that there
+is no dumper or path specified in this logger, and you have to provide a dumper and the file extension with `dumper()` and the path with `path()` method. 
+Otherwise, it will throw `SaliBhdr\DumpLog\ExceptionsInvalidArgumentException`
 
+Remember that the dumper should be the instance of `Symfony\Component\VarDumper\Dumper\AbstractDumper`.
+Feel free to create your own dumper and use the Raw logger.
 
-Issues
-----
+example:
+
+```php
+use SaliBhdr\DumpLog\Loggers\RawLogger;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+
+$dumper     = new CliDumper();
+$logger     = new RawLogger();
+$extension  = 'txt';
+
+$logger->path('__path_to_dir__')
+       ->dumper($dumper, $extension)
+       ->log($data)
+
+```
+
+<br/>
+
+### Custom Logger
+
+You can create your own dump logger by implementing the `SaliBhdr\DumpLog\Contracts\DumpLoggerInterface` or `SaliBhdr\DumpLog\Contracts\ChangeableDumperLoggerInterface`.
+You can also use the RawLogger in your own logger by first instantiating the RawLogger in your Logger and then use the `SaliBhdr\DumpLog\Traits\LogsThroughRawLogger` trait.
+
+example:
+
+```php
+<?php
+
+use App\CustomDumper;
+use SaliBhdr\DumpLog\Contracts\DumpLoggerInterface;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+
+class CustomTextLogger implements DumpLoggerInterface 
+{
+    use LogsThroughRawLogger;
+
+    /**
+     * @var RawLogger
+     */
+    protected $logger;
+
+    public function __construct()
+    {
+        $dumper = new CustomDumper() or new CliDumper();
+        $extension = 'txt';
+        
+        $this->logger = (new RawLogger())
+            ->dumper($dumper, $extension)
+            ->path('__path-to-dir__');
+    }
+}
+```
+<br />
+
+## Full Example
+
+```php
+<?php
+
+use SaliBhdr\DumpLog\Factory\Logger;
+
+Logger::make()
+        ->path('__path-to-dir__')
+        ->daily('__custom-dir-name__')
+        ->daily(true)
+        ->silent(true)
+        ->permission(0777)
+        ->info($data);
+
+```
+
+## Issues
+
 You can report issues in GitHub repository [here][link-issues]
 
-License
-----
+## License
+
 PHP dump logger is released under the MIT License.
 
 Created by [Salar Bahador][link-github]
 
-Linkedin Address : [Linkedin][link-linkedin]
+
+[![salar bahador linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn][link-linkedin]
+&nbsp;
+&nbsp;
+[![salar bahador github](https://i.stack.imgur.com/tskMh.png) GitHub][link-github]
+&nbsp;
+&nbsp;
+[<img alt="salar bahador packegist" src="https://packagist.org/favicon.ico?v=1674136735" width="15"> Packagist][link-packagist]
 
 Built with ❤ for you.
 
-Testing
-----
+## Testing
+
 for testing:
 
 ```sh
@@ -368,8 +477,8 @@ for both csfix and test:
 composer testfix
 ```
 
-Contributing
-----
+## Contributing
+
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
@@ -382,7 +491,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 [link-logo]: https://drive.google.com/a/domain.com/thumbnail?id=12yntFCiYIGJzI9FMUaF9cRtXKb0rXh9X
 [link-packagist]: https://packagist.org/packages/salibhdr/php-dump-logger
 [link-downloads]: https://packagist.org/packages/salibhdr/php-dump-logger/stats
-[link-packegist]: https://packagist.org/packages/salibhdr/php-dump-logger
+[link-packagist]: https://packagist.org/packages/salibhdr/php-dump-logger
 [link-github]: https://github.com/Salibhdr
 [link-issues]: https://github.com/Salibhdr/php-dump-logger/issues
 [link-linkedin]: https://www.linkedin.com/in/salar-bahador
