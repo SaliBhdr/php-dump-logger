@@ -9,35 +9,35 @@ use SaliBhdr\DumpLog\Tests\TestCase;
 
 class LoggerFactoryTest extends TestCase
 {
-    public function testCanMakePrettyLogger()
+    public function testCanMakePrettyLogger(): void
     {
         $dumper = Logger::make('pretty');
 
         $this->assertInstanceOf(PrettyLogger::class, $dumper);
     }
 
-    public function testCanMakeHtmlLogger()
+    public function testCanMakeHtmlLogger(): void
     {
         $dumper = Logger::make('html');
 
         $this->assertInstanceOf(HtmlLogger::class, $dumper);
     }
 
-    public function testTheDefaultLoggerIsPrettyLogger()
+    public function testTheDefaultLoggerIsPrettyLogger(): void
     {
         $dumper = Logger::make();
 
         $this->assertInstanceOf(PrettyLogger::class, $dumper);
     }
 
-    public function testPrettyMethodWillReturnPrettyLogger()
+    public function testPrettyMethodWillReturnPrettyLogger(): void
     {
         $dumper = Logger::html();
 
         $this->assertInstanceOf(HtmlLogger::class, $dumper);
     }
 
-    public function testHtmlMethodWillReturnHtmlLogger()
+    public function testHtmlMethodWillReturnHtmlLogger(): void
     {
         $dumper = Logger::pretty();
 

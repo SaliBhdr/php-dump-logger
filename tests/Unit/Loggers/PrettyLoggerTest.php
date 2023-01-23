@@ -12,7 +12,7 @@ class PrettyLoggerTest extends TestCase
      */
     protected $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -20,14 +20,14 @@ class PrettyLoggerTest extends TestCase
             ->path($this->getLogsPath());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
         $this->logger = null;
     }
 
-    public function testCanChangeTheLogFileNameInPrettyLog()
+    public function testCanChangeTheLogFileNameInPrettyLog(): void
     {
         $data = 'test';
 
@@ -40,7 +40,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanChangeThePathInPrettyLog()
+    public function testCanChangeThePathInPrettyLog(): void
     {
         $data = 'test';
 
@@ -55,7 +55,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanChangeTheDirectoryNameInPrettyLog()
+    public function testCanChangeTheDirectoryNameInPrettyLog(): void
     {
         $data = 'test';
 
@@ -68,7 +68,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanLogDailyInPrettyLog()
+    public function testCanLogDailyInPrettyLog(): void
     {
         $data = 'test';
 
@@ -83,7 +83,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanChangeLogDirPermissionOnCreationInPrettyLog()
+    public function testCanChangeLogDirPermissionOnCreationInPrettyLog(): void
     {
         $this->logger
             ->permission(0777)
@@ -101,7 +101,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFilePermission($this->getLogsDir(), '0770');
     }
 
-    public function testCanCallLogSilentlyWithoutThrowingAnExceptionIfThePathNotDefined()
+    public function testCanCallLogSilentlyWithoutThrowingAnExceptionIfThePathNotDefined(): void
     {
         $result = $this->logger
             ->path('')
@@ -114,7 +114,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileNotExists($filePath);
     }
 
-    public function testCanLogSilentlyIfThePathIsDefined()
+    public function testCanLogSilentlyIfThePathIsDefined(): void
     {
         $result = $this->logger
             ->silent()
@@ -126,7 +126,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanLogStringInPrettyLog()
+    public function testCanLogStringInPrettyLog(): void
     {
         $data = $this->strRandom(7);
 
@@ -135,7 +135,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.log'), $data);
     }
 
-    public function testCanLogIntegerInPrettyLog()
+    public function testCanLogIntegerInPrettyLog(): void
     {
         $data = rand(111111111, 9999999999);
 
@@ -144,7 +144,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.log'), $data);
     }
 
-    public function testCanLogDecimalInPrettyLog()
+    public function testCanLogDecimalInPrettyLog(): void
     {
         $data = 123.3666;
 
@@ -153,7 +153,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.log'), $data);
     }
 
-    public function testCanLogArrayInPrettyLog()
+    public function testCanLogArrayInPrettyLog(): void
     {
         $data = ['1', '2', '3', '4'];
 
@@ -169,7 +169,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.log'), $log);
     }
 
-    public function testCanLogAssociativeArrayInPrettyLog()
+    public function testCanLogAssociativeArrayInPrettyLog(): void
     {
         $data = [
             'foo' => 'bar',
@@ -188,7 +188,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.log'), $log);
     }
 
-    public function testCanLogMultiDimensionalArrayInPrettyLog()
+    public function testCanLogMultiDimensionalArrayInPrettyLog(): void
     {
         $data = [
             'foo' => [
@@ -219,7 +219,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.log'), $log);
     }
 
-    public function testCanLogStdObjectInPrettyLog()
+    public function testCanLogStdObjectInPrettyLog(): void
     {
         $data = (object) [
             'foo' => 'bar',
@@ -236,7 +236,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, '+"zee": "lorem"');
     }
 
-    public function testCanLogClassesInPrettyLog()
+    public function testCanLogClassesInPrettyLog(): void
     {
         $data = new RawLogger;
 
@@ -254,7 +254,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, '#silent: false');
     }
 
-    public function testCanLogEmergencyLogLevelInPrettyLog()
+    public function testCanLogEmergencyLogLevelInPrettyLog(): void
     {
         $data = 'emergency';
 
@@ -266,7 +266,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogAlertLogLevelInPrettyLog()
+    public function testCanLogAlertLogLevelInPrettyLog(): void
     {
         $data = 'alert';
 
@@ -278,7 +278,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogCriticalLogLevelInPrettyLog()
+    public function testCanLogCriticalLogLevelInPrettyLog(): void
     {
         $data = 'critical';
 
@@ -290,7 +290,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogErrorLogLevelInPrettyLog()
+    public function testCanLogErrorLogLevelInPrettyLog(): void
     {
         $data = 'error';
 
@@ -302,7 +302,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogWarningLogLevelInPrettyLog()
+    public function testCanLogWarningLogLevelInPrettyLog(): void
     {
         $data = 'warning';
 
@@ -314,7 +314,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogNoticeLogLevelInPrettyLog()
+    public function testCanLogNoticeLogLevelInPrettyLog(): void
     {
         $data = 'notice';
 
@@ -326,7 +326,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogInfoLogLevelInPrettyLog()
+    public function testCanLogInfoLogLevelInPrettyLog(): void
     {
         $data = 'info';
 
@@ -338,7 +338,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogDebugLogLevelInPrettyLog()
+    public function testCanLogDebugLogLevelInPrettyLog(): void
     {
         $data = 'debug';
 
@@ -350,7 +350,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogExceptionWithoutTraceInPrettyLog()
+    public function testCanLogExceptionWithoutTraceInPrettyLog(): void
     {
         try {
             throw new \Exception(
@@ -373,7 +373,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"line" => ' . ($line ?? 0));
     }
 
-    public function testCanLogExceptionWithTraceInPrettyLog()
+    public function testCanLogExceptionWithTraceInPrettyLog(): void
     {
         try {
             throw new \Exception(
@@ -398,7 +398,7 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"trace"');
     }
 
-    public function testCanLogDataWithCustomLevelInPrettyLog()
+    public function testCanLogDataWithCustomLevelInPrettyLog(): void
     {
         $data = 'test';
 

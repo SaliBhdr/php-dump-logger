@@ -17,7 +17,7 @@ class RawLoggerTest extends TestCase
      */
     protected $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,14 +26,14 @@ class RawLoggerTest extends TestCase
             ->path($this->getLogsPath());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
         $this->logger = null;
     }
 
-    public function testItCanLogDataWithCliDumperInRawLog()
+    public function testItCanLogDataWithCliDumperInRawLog(): void
     {
         $data = 'cli-test-log';
 
@@ -45,7 +45,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testItCanLogDataWithHtmlDumperInRawLog()
+    public function testItCanLogDataWithHtmlDumperInRawLog(): void
     {
         $data = 'html-test-log';
 
@@ -59,7 +59,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testWillThrowInvalidArgumentExceptionIfPathNotDefinedInRawLog()
+    public function testWillThrowInvalidArgumentExceptionIfPathNotDefinedInRawLog(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Please specify log directory location with path() method, The $path to log directory should contain a value.');
@@ -69,7 +69,7 @@ class RawLoggerTest extends TestCase
             ->log('test');
     }
 
-    public function testWillNotThrowInvalidArgumentExceptionIfPathNotDefinedAndTheLoggerCalledSilentlyInRawLog()
+    public function testWillNotThrowInvalidArgumentExceptionIfPathNotDefinedAndTheLoggerCalledSilentlyInRawLog(): void
     {
         $result = (new RawLogger())
             ->dumper(Dumper::cli(), 'log')
@@ -79,7 +79,7 @@ class RawLoggerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testItWillThrowRunTimeExceptionIfLogDirNotExitsInRawLog()
+    public function testItWillThrowRunTimeExceptionIfLogDirNotExitsInRawLog(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -92,7 +92,7 @@ class RawLoggerTest extends TestCase
         $this->callNotPublicMethod($logger, 'save', ['test', 'log', false]);
     }
 
-    public function testItWillThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedIfLogDirNotExitsInRawLog()
+    public function testItWillThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedIfLogDirNotExitsInRawLog(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Please specify a dumper and file extension with dumper() method.');
@@ -100,7 +100,7 @@ class RawLoggerTest extends TestCase
         (new RawLogger())->log('test');
     }
 
-    public function testItWillNotThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedIfLogDirNotExitsAndTheLoggerCalledSilentlyInRawLog()
+    public function testItWillNotThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedIfLogDirNotExitsAndTheLoggerCalledSilentlyInRawLog(): void
     {
         $result = (new RawLogger())
             ->silent()
@@ -109,7 +109,7 @@ class RawLoggerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testCanLogDataWithCustomDumperInRawLog()
+    public function testCanLogDataWithCustomDumperInRawLog(): void
     {
         $data = 'test';
 
@@ -122,14 +122,14 @@ class RawLoggerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testTheLogTimeIsCorrectInRawLog()
+    public function testTheLogTimeIsCorrectInRawLog(): void
     {
         $this->logger->log('test');
 
         $this->assertFileContains($this->getLogFilePath('log.log'), date('Y-m-d H:i:s'));
     }
 
-    public function testCanLogEmergencyLogLevelInRawLog()
+    public function testCanLogEmergencyLogLevelInRawLog(): void
     {
         $data = 'emergency';
 
@@ -141,7 +141,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogAlertLogLevelInRawLog()
+    public function testCanLogAlertLogLevelInRawLog(): void
     {
         $data = 'alert';
 
@@ -153,7 +153,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogCriticalLogLevelInRawLog()
+    public function testCanLogCriticalLogLevelInRawLog(): void
     {
         $data = 'critical';
 
@@ -165,7 +165,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogErrorLogLevelInRawLog()
+    public function testCanLogErrorLogLevelInRawLog(): void
     {
         $data = 'error';
 
@@ -177,7 +177,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogWarningLogLevelInRawLog()
+    public function testCanLogWarningLogLevelInRawLog(): void
     {
         $data = 'warning';
 
@@ -189,7 +189,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogNoticeLogLevelInRawLog()
+    public function testCanLogNoticeLogLevelInRawLog(): void
     {
         $data = 'notice';
 
@@ -201,7 +201,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogInfoLogLevelInRawLog()
+    public function testCanLogInfoLogLevelInRawLog(): void
     {
         $data = 'info';
 
@@ -213,7 +213,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogDebugLogLevelInRawLog()
+    public function testCanLogDebugLogLevelInRawLog(): void
     {
         $data = 'debug';
 
@@ -225,7 +225,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogExceptionWithoutTraceInRawLog()
+    public function testCanLogExceptionWithoutTraceInRawLog(): void
     {
         try {
             throw new \Exception(
@@ -248,7 +248,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"line" => ' . ($line ?? 0));
     }
 
-    public function testCanLogExceptionWithTraceInRawLog()
+    public function testCanLogExceptionWithTraceInRawLog(): void
     {
         try {
             throw new \Exception(
@@ -273,7 +273,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"trace"');
     }
 
-    public function testCanLogDataWithCustomLevelInRawLog()
+    public function testCanLogDataWithCustomLevelInRawLog(): void
     {
         $data = 'test';
 
@@ -285,7 +285,7 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testCanLogDataDailyWithCustomLevelInRawLog()
+    public function testCanLogDataDailyWithCustomLevelInRawLog(): void
     {
         $data = 'test';
 

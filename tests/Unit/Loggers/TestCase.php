@@ -6,7 +6,7 @@ use SaliBhdr\DumpLog\Tests\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->removeDir($this->getLogsPath('logs'));
         $this->removeDir($this->getLogsPath('tmp'));
@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
         parent::tearDown();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->removeDir($this->getLogsPath('logs'));
         $this->removeDir($this->getLogsPath('tmp'));
