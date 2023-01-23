@@ -4,10 +4,12 @@
 ![SaliBhdr|typhoon][link-logo]
 
 [![Total Downloads][ico-downloads]][link-downloads]
+[![Today Downloads][ico-today-downloads]][link-downloads]
 [![Required PHP Version][ico-php]][link-packagist]
 [![Latest Versions][ico-version]][link-packagist]
 [![License][ico-license]][link-packagist]
-[![Today Downloads][ico-today-downloads]][link-downloads]
+
+![example branch parameter](https://github.com/salibhdr/php-dump-logger/actions/workflows/run-tests.yml/badge.svg?branch=v1)
 
 [![Build Status](https://travis-ci.org/salibhdr/php-dump-logger.svg?branch=master)](https://travis-ci.org/salibhdr/php-dump-logger)
 [![Coverage Status](https://coveralls.io/repos/github/salibhdr/php-dump-logger/badge.svg?branch=develop)](https://coveralls.io/github/salibhdr/php-dump-logger?branch=develop)
