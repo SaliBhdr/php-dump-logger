@@ -6,13 +6,11 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Today Downloads][ico-today-downloads]][link-downloads]
 [![Required PHP Version][ico-php]][link-packagist]
+![build](https://github.com/salibhdr/php-dump-logger/actions/workflows/testing.yml/badge.svg?branch=v1)
+[![codecov](https://codecov.io/gh/SaliBhdr/php-dump-logger/branch/v1/graph/badge.svg?token=ZG9NV6JRRP)](https://codecov.io/gh/SaliBhdr/php-dump-logger)
 [![Latest Versions][ico-version]][link-packagist]
-[![License][ico-license]][link-packagist]
+[![Unstable Version][ico-unstable]][link-packagist]
 
-![example branch parameter](https://github.com/salibhdr/php-dump-logger/actions/workflows/run-tests.yml/badge.svg?branch=v1)
-
-[![Build Status](https://travis-ci.org/salibhdr/php-dump-logger.svg?branch=master)](https://travis-ci.org/salibhdr/php-dump-logger)
-[![Coverage Status](https://coveralls.io/repos/github/salibhdr/php-dump-logger/badge.svg?branch=develop)](https://coveralls.io/github/salibhdr/php-dump-logger?branch=develop)
 
 ## Table of Contents
 * [Introduction](#intoduction)
@@ -487,7 +485,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 [ico-php]: https://img.shields.io/badge/php-7.0|7.1-8892bf?style=flat-square&logo=php
 [ico-downloads]: https://poser.pugx.org/salibhdr/php-dump-logger/downloads
 [ico-today-downloads]: https://img.shields.io/packagist/dd/salibhdr/php-dump-logger.svg?style=flat-square
-[ico-license]: https://poser.pugx.org/salibhdr/php-dump-logger/v/unstable
+[ico-unstable]: https://poser.pugx.org/salibhdr/php-dump-logger/v/unstable
 [ico-version]: https://img.shields.io/packagist/v/salibhdr/php-dump-logger.svg?style=flat-square
 
 [link-logo]: https://drive.google.com/a/domain.com/thumbnail?id=12yntFCiYIGJzI9FMUaF9cRtXKb0rXh9X
