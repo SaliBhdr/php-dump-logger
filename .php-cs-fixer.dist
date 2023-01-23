@@ -22,10 +22,6 @@ return (new PhpCsFixer\Config())
         'trailing_comma_in_multiline' => true,
         'phpdoc_scalar' => true,
         'unary_operator_spaces' => true,
-        'binary_operator_spaces' => [
-            'align_double_arrow' => true,
-            'align_equals' => true
-        ],
         'blank_line_before_statement' => [
             'statements' => [
                 'break',
@@ -41,6 +37,7 @@ return (new PhpCsFixer\Config())
             'on_multiline' => 'ensure_fully_multiline',
             'keep_multiple_spaces_after_comma' => true,
         ],
+        'void_return' => true,
         'single_trait_insert_per_statement' => true,
         'blank_line_after_namespace' => true,
         'braces' => true,
@@ -52,14 +49,14 @@ return (new PhpCsFixer\Config())
         'function_declaration' => true,
         'indentation_type' => true,
         'line_ending' => true,
-        'lowercase_constants' => true,
+        'constant_case' => ['case' => 'lower'],
         'lowercase_keywords' => true,
         'no_blank_lines_after_class_opening' => true,
         'no_blank_lines_after_phpdoc' => true,
         'no_closing_tag' => true,
         'no_empty_phpdoc' => true,
         'no_empty_statement' => true,
-        'no_extra_consecutive_blank_lines' => true,
+        'no_extra_blank_lines' => true,
         'no_leading_namespace_whitespace' => true,
         'no_singleline_whitespace_before_semicolons' => true,
         'no_spaces_after_function_name' => true,

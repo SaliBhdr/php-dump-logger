@@ -12,7 +12,7 @@ class HtmlLoggerTest extends TestCase
      */
     protected $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -20,14 +20,14 @@ class HtmlLoggerTest extends TestCase
             ->path($this->getLogsPath());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
         $this->logger = null;
     }
 
-    public function testCanChangeTheLogFileNameInHtmlLog()
+    public function testCanChangeTheLogFileNameInHtmlLog(): void
     {
         $data = 'test';
 
@@ -40,7 +40,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanChangeThePathInHtmlLog()
+    public function testCanChangeThePathInHtmlLog(): void
     {
         $data = 'test';
 
@@ -55,7 +55,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanChangeTheDirectoryNameInHtmlLog()
+    public function testCanChangeTheDirectoryNameInHtmlLog(): void
     {
         $data = 'test';
 
@@ -68,7 +68,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanLogDailyInHtmlLog()
+    public function testCanLogDailyInHtmlLog(): void
     {
         $data = 'test';
 
@@ -83,7 +83,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanChangeLogDirPermissionOnCreationInHtmlLog()
+    public function testCanChangeLogDirPermissionOnCreationInHtmlLog(): void
     {
         $this->logger
             ->permission(0777)
@@ -101,7 +101,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFilePermission($this->getLogsDir(), '0770');
     }
 
-    public function testCanCallLogSilentlyWithoutThrowingAnExceptionIfThePathNotDefined()
+    public function testCanCallLogSilentlyWithoutThrowingAnExceptionIfThePathNotDefined(): void
     {
         $result = $this->logger
             ->path('')
@@ -114,7 +114,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileNotExists($filePath);
     }
 
-    public function testCanLogSilentlyIfThePathIsDefined()
+    public function testCanLogSilentlyIfThePathIsDefined(): void
     {
         $result = $this->logger
             ->silent()
@@ -126,7 +126,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileExists($filePath);
     }
 
-    public function testCanLogStringInHtmlLog()
+    public function testCanLogStringInHtmlLog(): void
     {
         $chars = 7;
 
@@ -137,7 +137,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.html'), '"<span class=sf-dump-str title="' . $chars . ' characters">' . $data . '</span>"');
     }
 
-    public function testCanLogIntegerInHtmlLog()
+    public function testCanLogIntegerInHtmlLog(): void
     {
         $data = rand(111111111, 9999999999);
 
@@ -146,7 +146,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.html'), '<span class=sf-dump-num>' . $data . '</span>');
     }
 
-    public function testCanLogDecimalInHtmlLog()
+    public function testCanLogDecimalInHtmlLog(): void
     {
         $data = 123.3666;
 
@@ -155,7 +155,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.html'), '<span class=sf-dump-num>' . $data . '</span>');
     }
 
-    public function testCanLogArrayInHtmlLog()
+    public function testCanLogArrayInHtmlLog(): void
     {
         $data = ['1', '2', '3', '4'];
 
@@ -173,7 +173,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, $log);
     }
 
-    public function testCanLogAssociativeArrayInHtmlLog()
+    public function testCanLogAssociativeArrayInHtmlLog(): void
     {
         $data = [
             'foo' => 'bar',
@@ -194,7 +194,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, $log);
     }
 
-    public function testCanLogMultiDimensionalArrayInHtmlLog()
+    public function testCanLogMultiDimensionalArrayInHtmlLog(): void
     {
         $data = [
             'foo' => [
@@ -214,12 +214,12 @@ class HtmlLoggerTest extends TestCase
 
         $this->assertFileContains($filePath, '<span class=sf-dump-note>array:3</span>');
 
-        $log = '  "<span class=sf-dump-key>foo</span>" => <span class=sf-dump-note>array:3</span> [<samp>
+        $log = '  "<span class=sf-dump-key>foo</span>" => <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
     "<span class=sf-dump-key>foo</span>" => "<span class=sf-dump-str title="3 characters">bar</span>"
     "<span class=sf-dump-key>tar</span>" => "<span class=sf-dump-str title="2 characters">go</span>"
     "<span class=sf-dump-key>zee</span>" => "<span class=sf-dump-str title="5 characters">lorem</span>"
   </samp>]
-  "<span class=sf-dump-key>tar</span>" => <span class=sf-dump-note>array:1</span> [<samp>
+  "<span class=sf-dump-key>tar</span>" => <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
     "<span class=sf-dump-key>foo</span>" => "<span class=sf-dump-str title="3 characters">bar</span>"
   </samp>]
   "<span class=sf-dump-key>zee</span>" => "<span class=sf-dump-str title="5 characters">lorem</span>"';
@@ -227,7 +227,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, $log);
     }
 
-    public function testCanLogStdObjectInHtmlLog()
+    public function testCanLogStdObjectInHtmlLog(): void
     {
         $data = (object) [
             'foo' => 'bar',
@@ -244,7 +244,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.html'), $log);
     }
 
-    public function testCanLogClassesInHtmlLog()
+    public function testCanLogClassesInHtmlLog(): void
     {
         $data = new RawLogger();
 
@@ -261,7 +261,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($this->getLogFilePath('log.html'), $log);
     }
 
-    public function testCanLogEmergencyLogLevelInHtmlLog()
+    public function testCanLogEmergencyLogLevelInHtmlLog(): void
     {
         $data = 'emergency';
 
@@ -273,7 +273,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="9 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogAlertLogLevelInHtmlLog()
+    public function testCanLogAlertLogLevelInHtmlLog(): void
     {
         $data = 'alert';
 
@@ -285,7 +285,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="5 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogCriticalLogLevelInHtmlLog()
+    public function testCanLogCriticalLogLevelInHtmlLog(): void
     {
         $data = 'critical';
 
@@ -297,7 +297,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="8 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogErrorLogLevelInHtmlLog()
+    public function testCanLogErrorLogLevelInHtmlLog(): void
     {
         $data = 'error';
 
@@ -309,7 +309,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="5 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogWarningLogLevelInHtmlLog()
+    public function testCanLogWarningLogLevelInHtmlLog(): void
     {
         $data = 'warning';
 
@@ -321,7 +321,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="7 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogNoticeLogLevelInHtmlLog()
+    public function testCanLogNoticeLogLevelInHtmlLog(): void
     {
         $data = 'notice';
 
@@ -333,7 +333,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="6 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogInfoLogLevelInHtmlLog()
+    public function testCanLogInfoLogLevelInHtmlLog(): void
     {
         $data = 'info';
 
@@ -345,7 +345,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="4 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogDebugLogLevelInHtmlLog()
+    public function testCanLogDebugLogLevelInHtmlLog(): void
     {
         $data = 'debug';
 
@@ -357,7 +357,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-str title="5 characters">' . $data . '</span>"');
     }
 
-    public function testCanLogExceptionWithoutTraceInHtmlLog()
+    public function testCanLogExceptionWithoutTraceInHtmlLog(): void
     {
         try {
             throw new \Exception(
@@ -380,7 +380,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-key>line</span>" => <span class=sf-dump-num>' . $line ?? 0 . '</span>');
     }
 
-    public function testCanLogExceptionWithTraceInHtmlLog()
+    public function testCanLogExceptionWithTraceInHtmlLog(): void
     {
         try {
             throw new \Exception(
@@ -404,7 +404,7 @@ class HtmlLoggerTest extends TestCase
         $this->assertFileContains($filePath, '"<span class=sf-dump-key>trace</span>"');
     }
 
-    public function testCanLogDataWithCustomLevelInHtmlLog()
+    public function testCanLogDataWithCustomLevelInHtmlLog(): void
     {
         $data = 'test';
 

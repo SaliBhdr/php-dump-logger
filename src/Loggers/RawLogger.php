@@ -215,7 +215,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    protected function save($data, string $level = 'log', bool $makeDir = true)
+    protected function save($data, string $level = 'log', bool $makeDir = true): void
     {
         if (empty($this->dumper) || empty($this->extension)) {
             throw new InvalidArgumentException('Please specify a dumper and file extension with dumper() method.');
@@ -249,7 +249,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     /**
      * @param string $path
      */
-    protected function makeDirIfNotExists(string $path)
+    protected function makeDirIfNotExists(string $path): void
     {
         if (!is_dir($path)) {
             $oldMask = umask(0);

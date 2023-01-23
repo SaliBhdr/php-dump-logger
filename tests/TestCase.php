@@ -29,7 +29,7 @@ abstract class TestCase extends BaseTestCase
         return rmdir($dir);
     }
 
-    public function assertFileContains(string $path, string $phrase)
+    public function assertFileContains(string $path, string $phrase): void
     {
         $content = @file_get_contents($path);
 
@@ -53,7 +53,7 @@ abstract class TestCase extends BaseTestCase
         return $randomString;
     }
 
-    protected function assertFilePermission(string $path, string $expected)
+    protected function assertFilePermission(string $path, string $expected): void
     {
         $actual = $this->getFilePermission($path);
 
