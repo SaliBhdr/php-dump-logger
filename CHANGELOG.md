@@ -1,3 +1,7 @@
+## 2.0.0 - 2023-01-23
+ - Merge pull request #9 from SaliBhdr/refactor/refactor-readme
+ - feature: add support to php 7.2 and higher
+
 ## 1.0.0 - 2023-01-19
  - Merge pull request #9 from SaliBhdr/refactor/refactor-readme
  - refactor(docs): refactoring readme and contributing desctiption to be much more helpful
