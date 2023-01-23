@@ -78,9 +78,9 @@ Install via composer:
 
 ## Version Compatibility
 
-| PHP            | PHP Dump Logger |
-|:---------------|:----------------|
-| 7.0.0 upper    | 1.x             |
+| PHP          | PHP Dump Logger |
+|:-------------|:----------------|
+| ^7.0 && ^7.1 | 1.x             |
 
 ## Basic Usage
 
@@ -482,7 +482,7 @@ composer testfix
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
-[ico-php]: https://img.shields.io/badge/php-≥7.0-8892bf?style=flat-square&logo=php
+[ico-php]: https://img.shields.io/badge/php-7.0|7.1-8892bf?style=flat-square&logo=php
 [ico-downloads]: https://poser.pugx.org/salibhdr/php-dump-logger/downloads
 [ico-today-downloads]: https://img.shields.io/packagist/dd/salibhdr/php-dump-logger.svg?style=flat-square
 [ico-license]: https://poser.pugx.org/salibhdr/php-dump-logger/v/unstable
