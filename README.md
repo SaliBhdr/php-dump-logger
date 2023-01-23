@@ -6,8 +6,8 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Today Downloads][ico-today-downloads]][link-downloads]
 [![Required PHP Version][ico-php]][link-packagist]
-![build](https://github.com/salibhdr/php-dump-logger/actions/workflows/testing.yml/badge.svg?branch=v1)
-[![codecov](https://codecov.io/gh/SaliBhdr/php-dump-logger/branch/v1/graph/badge.svg?token=ZG9NV6JRRP)](https://codecov.io/gh/SaliBhdr/php-dump-logger)
+![build](https://github.com/salibhdr/php-dump-logger/actions/workflows/testing.yml/badge.svg?branch=v2)
+[![codecov](https://codecov.io/gh/SaliBhdr/php-dump-logger/branch/v2/graph/badge.svg?token=ZG9NV6JRRP)](https://codecov.io/gh/SaliBhdr/php-dump-logger)
 [![Latest Versions][ico-version]][link-packagist]
 [![Unstable Version][ico-unstable]][link-packagist]
 
@@ -78,10 +78,14 @@ Install via composer:
 
 ## Version Compatibility
 
-| PHP          | PHP Dump Logger |
-|:-------------|:----------------|
-| ^7.0 && ^7.1 | 1.x             |
-| \>=7.2       | 2.x             |
+| PHP        | PHP Dump Logger |
+|:-----------|:----------------|
+| ^7 && ^7.1 | 1.x             |
+| ^7.2       | 2.x             |
+| ^7.3       | 2.x             |
+| ^7.4       | 2.x             |
+| ^8.1       | 2.x             |
+| ^8.2       | 2.x             |
 
 ## Basic Usage
 
@@ -483,7 +487,7 @@ composer testfix
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 
-[ico-php]: https://img.shields.io/badge/php->=7.2-8892bf?style=flat-square&logo=php
+[ico-php]: https://img.shields.io/badge/php-7.*|8.*-8892bf?style=flat-square&logo=php
 [ico-downloads]: https://poser.pugx.org/salibhdr/php-dump-logger/downloads
 [ico-today-downloads]: https://img.shields.io/packagist/dd/salibhdr/php-dump-logger.svg?style=flat-square
 [ico-unstable]: https://poser.pugx.org/salibhdr/php-dump-logger/v/unstable
