@@ -1,3 +1,7 @@
+## 2.0.1 - 2023-01-23
+ - refactor(docs): fix readme internal links
+ - bugfix(workflow): fix git workflow php versions and update action packages versions
+
 ## 2.0.0 - 2023-01-23
  - Merge pull request #9 from SaliBhdr/refactor/refactor-readme
  - feature: add support to php 7.2 and higher
