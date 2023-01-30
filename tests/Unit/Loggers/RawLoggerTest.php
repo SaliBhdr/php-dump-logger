@@ -22,7 +22,7 @@ class RawLoggerTest extends TestCase
         parent::setUp();
 
         $this->logger = (new RawLogger())
-            ->dumper(Dumper::cli(), 'log')
+            ->dumper(Dumper::cli())
             ->path($this->getLogsPath());
     }
 
@@ -33,7 +33,7 @@ class RawLoggerTest extends TestCase
         $this->logger = null;
     }
 
-    public function testItCanLogDataWithCliDumperInRawLog(): void
+    public function testCheckIfItCanLogDataWithCliDumperInRawLog(): void
     {
         $data = 'cli-test-log';
 
@@ -45,12 +45,12 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testItCanLogDataWithHtmlDumperInRawLog(): void
+    public function testCheckIfItCanLogDataWithHtmlDumperInRawLog(): void
     {
         $data = 'html-test-log';
 
         $this->logger
-            ->dumper(Dumper::html(), 'html')
+            ->dumper(Dumper::html())
             ->log($data);
 
         $filePath = $this->getLogFilePath('log.html');
@@ -59,48 +59,48 @@ class RawLoggerTest extends TestCase
         $this->assertFileContains($filePath, $data);
     }
 
-    public function testWillThrowInvalidArgumentExceptionIfPathNotDefinedInRawLog(): void
+    public function testCheckIfItWillThrowInvalidArgumentExceptionIfPathNotDefinedInRawLog(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Please specify log directory location with path() method, The $path to log directory should contain a value.');
 
         (new RawLogger())
-            ->dumper(Dumper::cli(), 'log')
+            ->dumper(Dumper::cli())
             ->log('test');
     }
 
-    public function testWillNotThrowInvalidArgumentExceptionIfPathNotDefinedAndTheLoggerCalledSilentlyInRawLog(): void
+    public function testCheckIfItWillNotThrowInvalidArgumentExceptionIfPathNotDefinedAndTheLoggerCalledSilentlyInRawLog(): void
     {
         $result = (new RawLogger())
-            ->dumper(Dumper::cli(), 'log')
+            ->dumper(Dumper::cli())
             ->silent()
             ->log('test');
 
         $this->assertFalse($result);
     }
 
-    public function testItWillThrowRunTimeExceptionIfLogDirNotExitsInRawLog(): void
+    public function testCheckIfItWillThrowRunTimeExceptionIfLogDirNotExitsInRawLog(): void
     {
         $this->expectException(RuntimeException::class);
 
         $fullPath = $this->getLogsPath();
 
         $logger = (new RawLogger())
-            ->dumper(Dumper::cli(), 'log')
+            ->dumper(Dumper::cli())
             ->path($fullPath);
 
         $this->callNotPublicMethod($logger, 'save', ['test', 'log', false]);
     }
 
-    public function testItWillThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedIfLogDirNotExitsInRawLog(): void
+    public function testCheckIfItWillThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedAndLogDirNotExitsInRawLog(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Please specify a dumper and file extension with dumper() method.');
+        $this->expectExceptionMessage('Please specify a dumper strategy with dumper() method.');
 
         (new RawLogger())->log('test');
     }
 
-    public function testItWillNotThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedIfLogDirNotExitsAndTheLoggerCalledSilentlyInRawLog(): void
+    public function testCheckIfItWillNotThrowInvalidArgumentExceptionIfDumperIsNotSpecifiedAndLogDirNotExitsAndTheLoggerCalledSilentlyInRawLog(): void
     {
         $result = (new RawLogger())
             ->silent()
@@ -122,7 +122,7 @@ class RawLoggerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testTheLogTimeIsCorrectInRawLog(): void
+    public function testCheckIfTheLogTimeIsCorrectInRawLog(): void
     {
         $this->logger->log('test');
 

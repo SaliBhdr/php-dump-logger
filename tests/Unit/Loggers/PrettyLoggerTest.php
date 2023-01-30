@@ -16,7 +16,7 @@ class PrettyLoggerTest extends TestCase
     {
         parent::setUp();
 
-        $this->logger = (new PrettyLogger)
+        $this->logger = (new PrettyLogger())
             ->path($this->getLogsPath());
     }
 
@@ -250,7 +250,6 @@ class PrettyLoggerTest extends TestCase
         $this->assertFileContains($filePath, '#dir: "dump"');
         $this->assertFileContains($filePath, '#permission: 509');
         $this->assertFileContains($filePath, '#dumper: null');
-        $this->assertFileContains($filePath, '#extension: null');
         $this->assertFileContains($filePath, '#silent: false');
     }
 

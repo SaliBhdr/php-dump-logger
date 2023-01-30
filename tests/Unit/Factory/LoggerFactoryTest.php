@@ -23,21 +23,21 @@ class LoggerFactoryTest extends TestCase
         $this->assertInstanceOf(HtmlLogger::class, $dumper);
     }
 
-    public function testTheDefaultLoggerIsPrettyLogger(): void
+    public function testCheckIfTheDefaultLoggerIsPrettyLogger(): void
     {
         $dumper = Logger::make();
 
         $this->assertInstanceOf(PrettyLogger::class, $dumper);
     }
 
-    public function testPrettyMethodWillReturnPrettyLogger(): void
+    public function testCheckIfPrettyMethodWillReturnPrettyLogger(): void
     {
         $dumper = Logger::html();
 
         $this->assertInstanceOf(HtmlLogger::class, $dumper);
     }
 
-    public function testHtmlMethodWillReturnHtmlLogger(): void
+    public function testCheckIfHtmlMethodWillReturnHtmlLogger(): void
     {
         $dumper = Logger::pretty();
 

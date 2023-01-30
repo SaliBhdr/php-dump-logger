@@ -2,68 +2,47 @@
 
 namespace SaliBhdr\DumpLog\Loggers;
 
-use SaliBhdr\DumpLog\Contracts\ChangeableDumperLoggerInterface;
+use SaliBhdr\DumpLog\Contracts\DumperStrategyInterface;
+use SaliBhdr\DumpLog\Contracts\DumpLoggerAwareInterface;
 use SaliBhdr\DumpLog\Contracts\DumpLoggerInterface;
 use SaliBhdr\DumpLog\Exceptions\InvalidArgumentException;
 use SaliBhdr\DumpLog\Exceptions\RuntimeException;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\AbstractDumper;
 
-class RawLogger implements ChangeableDumperLoggerInterface
+class RawLogger implements DumpLoggerAwareInterface
 {
     /**
-     * If set to true it will create separate file each day with date suffix
-     *
      * @var bool
      */
     protected $isDaily = false;
 
     /**
-     * Base path of the directory that the log files should be saved
-     *
      * @var string
      */
     protected $path;
 
     /**
-     * The name of the logs directory
-     *
-     * 'efl' stand for eye friendly log
-     *
      * @var string
      */
     protected $dir = 'dump';
 
     /**
-     * The permission of the log directory for first time creation
-     *
-     * @var int|string
+     * @var int
      */
     protected $permission = 0775;
 
     /**
-     * @var AbstractDumper
+     * @var DumperStrategyInterface
      */
     protected $dumper;
 
     /**
-     * @var string
-     */
-    protected $extension;
-
-    /**
-     * If set to true the logger will not throw error and simply will return boolean as result
-     *
-     * This is useful when you don't want the logger to interfere in the code execution and throw exception
-     *
      * @var bool
      */
     protected $silent = false;
 
     /**
-     * @param mixed $data
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -85,9 +64,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -97,9 +74,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -109,9 +84,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -133,9 +106,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -145,9 +116,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -157,10 +126,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param \Throwable $e
-     * @param bool       $withTrace
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -182,10 +148,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @param mixed  $data
-     * @param string $level
-     *
-     * @return bool
+     * {@inheritDoc}
      *
      * @throws RuntimeException|InvalidArgumentException
      */
@@ -215,10 +178,10 @@ class RawLogger implements ChangeableDumperLoggerInterface
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    protected function save($data, string $level = 'log', bool $makeDir = true): void
+    protected function save($data, string $level, bool $makeDir = true): void
     {
-        if (empty($this->dumper) || empty($this->extension)) {
-            throw new InvalidArgumentException('Please specify a dumper and file extension with dumper() method.');
+        if (empty($this->dumper)) {
+            throw new InvalidArgumentException('Please specify a dumper strategy with dumper() method.');
         }
 
         $fullPath = $this->getFullPath();
@@ -231,7 +194,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
             $level .= '-' . date('Y-m-d');
         }
 
-        $file = $fullPath . DIRECTORY_SEPARATOR . "$level.$this->extension";
+        $file = $fullPath . DIRECTORY_SEPARATOR . $level . '.' . $this->dumper->getExtension();
 
         $cloner = new VarCloner();
 
@@ -241,9 +204,11 @@ class RawLogger implements ChangeableDumperLoggerInterface
             throw new RuntimeException("Output should be a resource, The directory `$fullPath` not exists. Maybe something went wrong with log file creation.");
         }
 
-        fwrite($output, $this->getLogTitle());
+        fwrite($output, $this->dumper->getTitle());
 
-        $this->dumper->dump($cloner->cloneVar($data), $output);
+        $this->dumper
+            ->getDumper()
+            ->dump($cloner->cloneVar($data), $output);
     }
 
     /**
@@ -259,20 +224,6 @@ class RawLogger implements ChangeableDumperLoggerInterface
     }
 
     /**
-     * @return string
-     */
-    protected function getLogTitle(): string
-    {
-        $title = "\n";
-        $title .= '---| ';
-        $title .= date('Y-m-d H:i:s');
-        $title .= ' |-------------------------------------------------------------------------------------------';
-        $title .= "\n\n";
-
-        return $title;
-    }
-
-    /**
      * Returns the full path to the log directory
      *
      * @return string
@@ -285,6 +236,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
             throw new InvalidArgumentException('Please specify log directory location with path() method, The $path to log directory should contain a value.');
         }
 
+        # replaces double dir separator with single dir separator
         return str_replace(
             DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
             DIRECTORY_SEPARATOR,
@@ -292,31 +244,15 @@ class RawLogger implements ChangeableDumperLoggerInterface
         );
     }
 
-    /**
-     * Changes the base path of the directory that the log files should be saved
-     *
-     * Default value is global server variable's 'DOCUMENT_ROOT' if exists or current directory which the logger is called
-     *
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function path(string $path = null): DumpLoggerInterface
+    /** {@inheritDoc} */
+    public function path(string $path): DumpLoggerInterface
     {
         $this->path = $path;
 
         return $this;
     }
 
-    /**
-     * Changes the name of the logs directory
-     *
-     * Default directory name is dump
-     *
-     * @param string $dir
-     *
-     * @return $this
-     */
+    /** {@inheritDoc} */
     public function dir(string $dir): DumpLoggerInterface
     {
         $this->dir = $dir;
@@ -324,15 +260,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
         return $this;
     }
 
-    /**
-     * Changes the permission of the log directory
-     *
-     * Default is 0770 (all access to owner and group)
-     *
-     * @param int $permission
-     *
-     * @return $this
-     */
+    /** {@inheritDoc} */
     public function permission(int $permission): DumpLoggerInterface
     {
         $this->permission = $permission;
@@ -340,13 +268,7 @@ class RawLogger implements ChangeableDumperLoggerInterface
         return $this;
     }
 
-    /**
-     * If set to true it will create separate file each day with date suffix
-     *
-     * @param bool $isDaily
-     *
-     * @return $this
-     */
+    /** {@inheritDoc} */
     public function daily(bool $isDaily = true): DumpLoggerInterface
     {
         $this->isDaily = $isDaily;
@@ -354,32 +276,18 @@ class RawLogger implements ChangeableDumperLoggerInterface
         return $this;
     }
 
-    /**
-     * @param AbstractDumper $dumper
-     * @param string         $extension
-     *
-     * @return $this
-     */
-    public function dumper(AbstractDumper $dumper, string $extension): ChangeableDumperLoggerInterface
+    /** {@inheritDoc} */
+    public function silent(bool $silent = true): DumpLoggerInterface
     {
-        $this->dumper    = $dumper;
-        $this->extension = $extension;
+        $this->silent = $silent;
 
         return $this;
     }
 
-    /**
-     * If set to true the logger will not throw error and simply will return boolean as result
-     *
-     * This is useful when you don't want the logger to interfere in the code execution and throw exception
-     *
-     * @param bool $silent
-     *
-     * @return $this
-     */
-    public function silent(bool $silent = true): DumpLoggerInterface
+    /** {@inheritDoc} */
+    public function dumper(DumperStrategyInterface $dumper): DumpLoggerAwareInterface
     {
-        $this->silent = $silent;
+        $this->dumper = $dumper;
 
         return $this;
     }
