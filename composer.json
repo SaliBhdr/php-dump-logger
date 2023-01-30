@@ -47,7 +47,7 @@
   },
   "scripts": {
     "csfix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist --allow-risky=yes",
-    "test": "vendor/bin/phpunit --testdox",
+    "test": "XDEBUG_MODE=coverage vendor/bin/phpunit --testdox",
     "testfix": [
       "@csfix",
       "@test"

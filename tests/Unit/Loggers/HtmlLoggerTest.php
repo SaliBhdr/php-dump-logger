@@ -16,7 +16,7 @@ class HtmlLoggerTest extends TestCase
     {
         parent::setUp();
 
-        $this->logger = (new HtmlLogger)
+        $this->logger = (new HtmlLogger())
             ->path($this->getLogsPath());
     }
 
@@ -250,12 +250,11 @@ class HtmlLoggerTest extends TestCase
 
         $this->logger->log($data);
 
-        $log = '#<span class=sf-dump-protected title="Protected property">isDaily</span>: <span class=sf-dump-const>false</span>
+        $log = '  #<span class=sf-dump-protected title="Protected property">isDaily</span>: <span class=sf-dump-const>false</span>
   #<span class=sf-dump-protected title="Protected property">path</span>: <span class=sf-dump-const>null</span>
   #<span class=sf-dump-protected title="Protected property">dir</span>: "<span class=sf-dump-str title="4 characters">dump</span>"
   #<span class=sf-dump-protected title="Protected property">permission</span>: <span class=sf-dump-num>509</span>
   #<span class=sf-dump-protected title="Protected property">dumper</span>: <span class=sf-dump-const>null</span>
-  #<span class=sf-dump-protected title="Protected property">extension</span>: <span class=sf-dump-const>null</span>
   #<span class=sf-dump-protected title="Protected property">silent</span>: <span class=sf-dump-const>false</span>';
 
         $this->assertFileContains($this->getLogFilePath('log.html'), $log);

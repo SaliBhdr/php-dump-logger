@@ -1,3 +1,6 @@
+## 2.1.0 - 2023-01-23
+ - feature: add dumper strategy
+
 ## 2.0.1 - 2023-01-23
  - refactor(docs): fix readme internal links
  - bugfix(workflow): fix git workflow php versions and update action packages versions
