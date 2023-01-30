@@ -18,7 +18,7 @@ class HtmlLogger implements DumpLoggerInterface
     public function __construct()
     {
         $this->logger = (new RawLogger())
-            ->dumper(Dumper::html(), 'html')
+            ->dumper(Dumper::html())
             ->path($_SERVER['DOCUMENT_ROOT'] ?? null);
     }
 }

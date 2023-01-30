@@ -4,5 +4,5 @@ namespace SaliBhdr\DumpLog\Contracts;
 
 interface FactoryInterface
 {
-    public static function make(string $type): DumpLoggerInterface;
+    public static function make(string $type);
 }

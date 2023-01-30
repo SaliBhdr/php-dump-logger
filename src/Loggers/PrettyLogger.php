@@ -18,7 +18,7 @@ class PrettyLogger implements DumpLoggerInterface
     public function __construct()
     {
         $this->logger = (new RawLogger())
-            ->dumper(Dumper::cli(), 'log')
+            ->dumper(Dumper::cli())
             ->path($_SERVER['DOCUMENT_ROOT'] ?? null);
     }
 }

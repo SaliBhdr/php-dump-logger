@@ -28,5 +28,8 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <ini name="error_reporting" value="-1" />
+        <ini name="xdebug.mode" value="coverage" />
+        <env name="XDEBUG_MODE" value="coverage" />
     </php>
 </phpunit>

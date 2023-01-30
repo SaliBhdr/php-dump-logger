@@ -2,10 +2,10 @@
 
 namespace SaliBhdr\DumpLog\Tests\Unit\Factory;
 
+use SaliBhdr\DumpLog\Dumpers\CliDumperStrategy;
+use SaliBhdr\DumpLog\Dumpers\HtmlDumperStrategy;
 use SaliBhdr\DumpLog\Factory\Dumper;
 use SaliBhdr\DumpLog\Tests\TestCase;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
 class DumperFactoryTest extends TestCase
 {
@@ -13,34 +13,34 @@ class DumperFactoryTest extends TestCase
     {
         $dumper = Dumper::make('cli');
 
-        $this->assertInstanceOf(CliDumper::class, $dumper);
+        $this->assertInstanceOf(CliDumperStrategy::class, $dumper);
     }
 
     public function testCanMakeHtmlDumper(): void
     {
         $dumper = Dumper::make('html');
 
-        $this->assertInstanceOf(HtmlDumper::class, $dumper);
+        $this->assertInstanceOf(HtmlDumperStrategy::class, $dumper);
     }
 
-    public function testTheDefaultDumperIsCliDumper(): void
+    public function testCheckIfTheDefaultDumperIsCliDumper(): void
     {
         $dumper = Dumper::make();
 
-        $this->assertInstanceOf(CliDumper::class, $dumper);
+        $this->assertInstanceOf(CliDumperStrategy::class, $dumper);
     }
 
-    public function testCliMethodWillReturnCliDumper(): void
+    public function testCheckIfCliMethodWillReturnCliDumper(): void
     {
         $dumper = Dumper::cli();
 
-        $this->assertInstanceOf(CliDumper::class, $dumper);
+        $this->assertInstanceOf(CliDumperStrategy::class, $dumper);
     }
 
-    public function testHtmlMethodWillReturnHtmlDumper(): void
+    public function testCheckIfHtmlMethodWillReturnHtmlDumper(): void
     {
         $dumper = Dumper::html();
 
-        $this->assertInstanceOf(HtmlDumper::class, $dumper);
+        $this->assertInstanceOf(HtmlDumperStrategy::class, $dumper);
     }
 }

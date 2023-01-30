@@ -2,13 +2,14 @@
 
 namespace SaliBhdr\DumpLog\Factory;
 
-use Symfony\Component\VarDumper\Dumper\AbstractDumper;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use SaliBhdr\DumpLog\Contracts\DumperStrategyInterface;
+use SaliBhdr\DumpLog\Contracts\FactoryInterface;
+use SaliBhdr\DumpLog\Dumpers\CliDumperStrategy;
+use SaliBhdr\DumpLog\Dumpers\HtmlDumperStrategy;
 
-class Dumper
+class Dumper implements FactoryInterface
 {
-    public static function make(string $type = null): AbstractDumper
+    public static function make(string $type = null): DumperStrategyInterface
     {
         switch ($type) {
             case 'html':
@@ -19,13 +20,13 @@ class Dumper
         }
     }
 
-    public static function html(): AbstractDumper
+    public static function html(): DumperStrategyInterface
     {
-        return new HtmlDumper();
+        return new HtmlDumperStrategy();
     }
 
-    public static function cli(): AbstractDumper
+    public static function cli(): DumperStrategyInterface
     {
-        return new CliDumper();
+        return new CliDumperStrategy();
     }
 }

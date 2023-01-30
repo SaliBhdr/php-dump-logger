@@ -1,7 +1,5 @@
 # PHP Dump Logger
-## It's All About Readability.
-
-![SaliBhdr|typhoon][link-logo]
+## It's All About Readability
 
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Today Downloads][ico-today-downloads]][link-downloads]
@@ -40,22 +38,27 @@
 
 ## Introduction <span id="introduction"></span>
 PHP dump logger uses [Symfony's var-dumper][link-symfony-var-dumper] to create a simple, easy to use, eye-friendly, and pretty log files for any PHP application.
-If you are a fan of using `dd()` and `dump()`, this package is for you.
+If you are a big fan of using `dd()` and `dump()`, this package is for you.
 
 **Example log file content:**
 
 ![php dump logger](https://symfony.com/doc/6.2/_images/01-simple.png)
 
-Have you ever tried to log something with Symfony's monolog or laravel's logger facade and tried to find the logged data inside a maze of text?
+Have you ever tried to log something with monolog, Symfony, or Laravel logger and tried to find the logged data inside a maze of text?
 Especially when you don't have time and don't want to go through installing and configuring Xdebug or there is a bug in production code,
 and you just want to see the API responses without messing with the code execution.
-The first solution that comes to mind is to use a logger to log the data instead of using `dd()`, `dump()`, or `var_dump()` functions.
-But as I said, loggers aren't producing readable files. You have to provide them with a string, and they are incapable of directly logging a complex class.
-How nice would it be to have a functionality like `dd()` without interruption in the code?
+
+The problem with `dd()`, `dump()`, or `var_dump()` functions is that they print the data, which is something 
+that sometimes you don't want, especially when the code execution should not be interrupted.
+
+The first solution that comes to mind is to use a logger to log the data instead of using those print functions. 
+But as I said, loggers aren't producing readable files, and sometimes you have to only provide them with a string, and they are incapable 
+of directly logging a complex class. How nice would it be to have a functionality like `dd()` without interruption in the code?
 
 Here **php-dump-logger** comes to the rescue.
 
-**php-dump-logger** uses [Symfony's var-dumper][link-symfony-var-dumper] to generate the log file content and then saves the output to a file.
+**php-dump-logger** uses [Symfony's var-dumper][link-symfony-var-dumper] to generate the log content 
+and then saves the output into a file. Which is by the way really pleasant in the eye.
 You can either log the data in a nice `html` or `log` format or even provide your own dumper.
 
 **Features**
@@ -64,7 +67,7 @@ You can either log the data in a nice `html` or `log` format or even provide you
 * Readable log in `log` format
 * Ability to log classes, arrays, objects, and basically any variable you like. There is no limit.
 * Fully customization of log format and dumper
-* Separate daily and all in one logs
+* Separation of the daily and all in one logs
 * Logging file in a custom level
 * Changing the path and directory of the log
 
@@ -153,7 +156,7 @@ $logger->warning(mixed $data);
 $logger->notice(mixed $data);
 $logger->info(mixed $data);
 $logger->debug(mixed $data);
-$logger->exception(\Throwable $exception);
+$logger->exception(\Throwable $e);
 $logger->log(mixed $data);
 
 ```
@@ -163,8 +166,8 @@ $logger->log(mixed $data);
 ### Exception Logging <span id="exception-logging"></span>
 
 If you want to log the exception in a much more readable way You should use the `exception()` method.
-It is good for creating logs for exceptions like this:
-If You want to see the trace of the exception you can set the second argument named `$withTrace` to true:
+This method is good for creating logs for exceptions. If You want to see the trace of the exception you can set 
+the second argument named `$withTrace` to true:
 
 ```php
 try {
@@ -212,8 +215,8 @@ This will create a file named `custom-level.log`.
 ### Path <span id="path"></span>
 
 By default, the path to log directory is set to be `$_SERVER['DOCUMENT_ROOT']` but if you call this logger
-from a console command the document rule will be null and the logger could not find a directory to save the file, and it will throw
-InvalidArgument Exception. So make sure to prove the directory path like so:
+from a console command the document root will be null and the logger could not find a directory to save the file, and it will throw
+`InvalidArgumentException`. So make sure to provide the directory path like so:
 
 ```php
 
@@ -250,7 +253,7 @@ Sometimes you want to put your log files in a directory with restricted permissi
 In order to do that you can change the log file's directory permission with the `permission()` method.
 remember that This directory permission is only applied in the directory's first creation.
 So you can't change the directory's permission after the creation.
-Remember to provide the apache group with the right permissions to create and execute the file in the directory.
+Remember to provide a group with the right permissions to create and execute the file in the directory.
 You don't want to create a directory that even PHP could not write into it.
 By default, the directory and the files inside it will have 0775 permission.
 
@@ -289,7 +292,7 @@ info-2023-02-01.log
 
 Calling `silent()` method allows you to log data without throwing an error.
 
-Remember that in some cases the logger will throw an error like when the $path is empty, or when it couldn't write into the target file for permission reasons.
+Remember, in some cases the logger will throw an error when the $path is empty, or when it couldn't write into the target file for permission reasons.
 
 So if you want to avoid that, and you don't want to interrupt the code execution, you can call `silent()` method.
 In the background this method will force the logger to execute the code in try-catch block and return a boolean instead of the exception.
@@ -361,7 +364,7 @@ $logger = Logger::html();
 
 Raw Logger is base logger class that other loggers are using it. The only difference between Raw Logger and the others is that there
 is no dumper or path specified in this logger, and you have to provide a dumper and the file extension with `dumper()` and the path with `path()` method.
-Otherwise, it will throw `SaliBhdr\DumpLog\ExceptionsInvalidArgumentException`
+Otherwise, it will throw `SaliBhdr\DumpLog\Exceptions\InvalidArgumentException`
 
 Remember that the dumper should be the instance of `Symfony\Component\VarDumper\Dumper\AbstractDumper`.
 Feel free to create your own dumper and use the Raw logger.
@@ -386,37 +389,75 @@ $logger->path('__path_to_dir__')
 
 ### Custom Logger <span id="custom-logger"></span>
 
-You can create your own dump logger by implementing the `SaliBhdr\DumpLog\Contracts\DumpLoggerInterface` or `SaliBhdr\DumpLog\Contracts\ChangeableDumperLoggerInterface`.
-You can also use the RawLogger in your own logger by first instantiating the RawLogger in your Logger and then use the `SaliBhdr\DumpLog\Traits\LogsThroughRawLogger` trait.
+You can create your own dump logger by implementing one of these interfaces: 
+- `SaliBhdr\DumpLog\Contracts\DumpLoggerInterface` : Without the ability to change the dumper
+- `SaliBhdr\DumpLog\Contracts\DumpLoggerAwareInterface` : You have to add `dumper()` setter
 
-example:
+You can also use the RawLogger in your own logger by first instantiating 
+the RawLogger in your Logger and then use the 
+`SaliBhdr\DumpLog\Traits\LogsThroughRawLogger` trait.
+
+If you use `DumpLoggerAwareInterface` you should keep in mind that the dumper should 
+implement `SaliBhdr\DumpLog\Contracts\DumperStrategyInterface`;
+
+Example dumper strategy:
 
 ```php
 <?php
 
-use App\CustomDumper;
-use SaliBhdr\DumpLog\Contracts\DumpLoggerInterface;
+namespace App;
+
+use SaliBhdr\DumpLog\Contracts\DumperStrategyInterface;
+use Symfony\Component\VarDumper\Dumper\AbstractDumper;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
+
+class CustomDumperStrategy implements DumperStrategyInterface
+{
+
+    public function getDumper() : AbstractDumper
+    {
+       # Here we want to render the log content with CliDumper
+       return new CliDumper();
+    }
+    
+    public function getExtension() : string
+    {
+       # Here we want to save it as text file
+       return 'txt';
+    }
+    
+    public function getTitle(): string
+    {
+        # title will be shown on top of each log (usually it's better to add the date and time)
+        return "\n" . date('H:i:s') . "\n"
+    }
+    
+}
+
+```
+
+And then you can use your own dumper strategy:
+
+```php
+<?php
+
+use App\CustomDumperStrategy;
+use SaliBhdr\DumpLog\Contracts\DumpLoggerInterface;
 
 class CustomTextLogger implements DumpLoggerInterface 
 {
     use LogsThroughRawLogger;
 
-    /**
-     * @var RawLogger
-     */
     protected $logger;
 
     public function __construct()
-    {
-        $dumper = new CustomDumper() or new CliDumper();
-        $extension = 'txt';
-        
+    {        
         $this->logger = (new RawLogger())
-            ->dumper($dumper, $extension)
+            ->dumper(new CustomDumperStrategy())
             ->path('__path-to-dir__');
     }
 }
+
 ```
 <br />
 
@@ -429,7 +470,7 @@ use SaliBhdr\DumpLog\Factory\Logger;
 
 Logger::make()
         ->path('__path-to-dir__')
-        ->daily('__custom-dir-name__')
+        ->dir('__custom-dir-name__')
         ->daily(true)
         ->silent(true)
         ->permission(0777)
@@ -493,7 +534,6 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 [link-codecov]: https://codecov.io/gh/SaliBhdr/php-dump-logger
 [link-testing]: https://github.com/SaliBhdr/php-dump-logger/actions/workflows/testing.yml
-[link-logo]: https://drive.google.com/a/domain.com/thumbnail?id=12yntFCiYIGJzI9FMUaF9cRtXKb0rXh9X
 [link-packagist]: https://packagist.org/packages/salibhdr/php-dump-logger
 [link-downloads]: https://packagist.org/packages/salibhdr/php-dump-logger/stats
 [link-packagist]: https://packagist.org/packages/salibhdr/php-dump-logger
