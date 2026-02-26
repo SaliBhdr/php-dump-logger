@@ -9,7 +9,7 @@ use SaliBhdr\DumpLog\Dumpers\HtmlDumperStrategy;
 
 class Dumper implements FactoryInterface
 {
-    public static function make(string $type = null): DumperStrategyInterface
+    public static function make(?string $type = null): DumperStrategyInterface
     {
         switch ($type) {
             case 'html':
